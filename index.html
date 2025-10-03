@@ -5,20 +5,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>geoloc-demo</title>
+    <!-- Feuille de style Leaflet pour la carte -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Feuille de style personnalisée -->
     <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
+    <!-- Conteneur principal de la carte -->
     <div id="map"></div>
+
+    <!-- Bouton pour ouvrir le popup de filtre (en haut à droite) -->
+    <button id="filter-btn">
+        Filtrer
+    </button>
+
+    <!-- Popup de filtre avec cases à cocher pour les types de lieux -->
+    <div id="filter-popup" class="hidden">
+        <div class="filter-popup-content">
+            <label>
+                <input type="checkbox" id="filter-cafes" checked>
+                Cafés
+            </label>
+            <label>
+                <input type="checkbox" id="filter-musees" checked>
+                Musées
+            </label>
+            <button id="filter-apply-btn">Appliquer</button>
+        </div>
+    </div>
+
+    <!-- Bouton pour recentrer la carte sur "Ma position" (en bas à droite ou centré sur mobile) -->
     <button id="recenter-btn">
         <img src="/images/pin-fill-sharp-circle-635-svgrepo-com.svg" alt="logo marqueur" class="btn-icon" />
         Ma position
     </button>
+
+    <!-- Popup personnalisé pour afficher les infos d'un lieu (en bas à gauche ou centré sur mobile) -->
     <div id="custom-popup" class="hidden"></div>
+
+    <!-- Script Leaflet pour la carte -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Script principal de l’application -->
     <script src="./script.js"></script>
 </body>
 

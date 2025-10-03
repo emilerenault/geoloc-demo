@@ -64,61 +64,69 @@ function hideCustomPopup() {
   document.getElementById("custom-popup").classList.add("hidden");
 }
 
-// Marqueurs avec popup personnalisé
-L.marker([48.8686, 2.3359])
-  .addTo(map)
-  .on("click", function () {
-    showCustomPopup({
-      name: "☕️ Café Joyeux (St-Augustin)",
-      image:
-        "https://lh3.googleusercontent.com/p/AF1QipNmEM3yyUxVAcIsGCgYyCPqrChzkoVFeWSJTUOq=s1360-w1360-h1020",
-      url: "https://www.cafejoyeux.com/fr/content/41-cafe-joyeux-paris-opera",
-    });
-  });
+// Stocke les marqueurs par type
+const markers = {
+  cafes: [],
+  musees: [],
+};
 
-L.marker([48.8765, 2.3562])
-  .addTo(map)
-  .on("click", function () {
-    showCustomPopup({
-      name: "☕️ Café Tranquille",
-      image:
-        "https://lh3.googleusercontent.com/p/AF1QipNJxxh7hzuuTO0VuBCPNvUFKHkgO0BoLg5l90gF=s1360-w1360-h1020",
-      url: "https://www.instagram.com/cafetranquille",
-    });
-  });
+// Ajoute les marqueurs cafés
+markers.cafes.push(
+  L.marker([48.8686, 2.3359])
+    .addTo(map)
+    .on("click", function () {
+      showCustomPopup({
+        name: "☕️ Café Joyeux (St-Augustin)",
+        image:
+          "https://lh3.googleusercontent.com/p/AF1QipNmEM3yyUxVAcIsGCgYyCPqrChzkoVFeWSJTUOq=s1360-w1360-h1020",
+        url: "https://www.cafejoyeux.com/fr/content/41-cafe-joyeux-paris-opera",
+      });
+    }),
+  L.marker([48.8765, 2.3562])
+    .addTo(map)
+    .on("click", function () {
+      showCustomPopup({
+        name: "☕️ Café Tranquille",
+        image:
+          "https://lh3.googleusercontent.com/p/AF1QipNJxxh7hzuuTO0VuBCPNvUFKHkgO0BoLg5l90gF=s1360-w1360-h1020",
+        url: "https://www.instagram.com/cafetranquille",
+      });
+    })
+);
 
-L.marker([48.8606, 2.2976])
-  .addTo(map)
-  .on("click", function () {
-    showCustomPopup({
-      name: "🏛️ Musée du quai Branly",
-      image:
-        "https://lh3.googleusercontent.com/p/AF1QipMuncpXbWlPpLbu9rK8t3EbsYToaFQnF4e5senZ=s1360-w1360-h1020",
-      url: "https://www.quaibranly.fr/",
-    });
-  });
-
-L.marker([48.8617, 2.3435])
-  .addTo(map)
-  .on("click", function () {
-    showCustomPopup({
-      name: "🏛️ Le Musée en Herbe",
-      image:
-        "https://lh3.googleusercontent.com/p/AF1QipN1opHFTqspUndplnzgwqFataHw9sGQ8bt9cIMb=s1360-w1360-h1020",
-      url: "https://www.musee-en-herbe.com/",
-    });
-  });
-
-L.marker([48.8707, 2.3702])
-  .addTo(map)
-  .on("click", function () {
-    showCustomPopup({
-      name: "🏛️ Musée de poche",
-      image:
-        "https://lh3.googleusercontent.com/p/AF1QipORT7mT8wrTuRp0tB_cR9AKPDSVehIMy1UBzhvH=s1360-w1360-h1020",
-      url: "https://museedepoche.fr",
-    });
-  });
+// Ajoute les marqueurs musées
+markers.musees.push(
+  L.marker([48.8606, 2.2976])
+    .addTo(map)
+    .on("click", function () {
+      showCustomPopup({
+        name: "🏛️ Musée du quai Branly",
+        image:
+          "https://lh3.googleusercontent.com/p/AF1QipMuncpXbWlPpLbu9rK8t3EbsYToaFQnF4e5senZ=s1360-w1360-h1020",
+        url: "https://www.quaibranly.fr/",
+      });
+    }),
+  L.marker([48.8617, 2.3435])
+    .addTo(map)
+    .on("click", function () {
+      showCustomPopup({
+        name: "🏛️ Le Musée en Herbe",
+        image:
+          "https://lh3.googleusercontent.com/p/AF1QipN1opHFTqspUndplnzgwqFataHw9sGQ8bt9cIMb=s1360-w1360-h1020",
+        url: "https://www.musee-en-herbe.com/",
+      });
+    }),
+  L.marker([48.8707, 2.3702])
+    .addTo(map)
+    .on("click", function () {
+      showCustomPopup({
+        name: "🏛️ Musée de poche",
+        image:
+          "https://lh3.googleusercontent.com/p/AF1QipORT7mT8wrTuRp0tB_cR9AKPDSVehIMy1UBzhvH=s1360-w1360-h1020",
+        url: "https://museedepoche.fr",
+      });
+    })
+);
 
 // Masquer le popup si on clique sur la carte ou sur le marqueur principal
 map.on("click", function (e) {
@@ -142,3 +150,55 @@ map.on("click", function (e) {
   // Ajoute un marqueur à l'endroit du clic
   L.marker(e.latlng).addTo(map).bindPopup("Nouveau lieu").openPopup();
 });
+
+// Fonction pour afficher/masquer les marqueurs selon le filtre
+function filterMarkers(type) {
+  // Masque tous les marqueurs
+  Object.values(markers)
+    .flat()
+    .forEach((marker) => map.removeLayer(marker));
+  // Affiche ceux du type choisi
+  if (type === "cafes") {
+    markers.cafes.forEach((marker) => marker.addTo(map));
+  } else if (type === "musees") {
+    markers.musees.forEach((marker) => marker.addTo(map));
+  } else {
+    Object.values(markers)
+      .flat()
+      .forEach((marker) => marker.addTo(map));
+  }
+}
+
+// Affiche/masque le popup de filtre
+const filterBtn = document.getElementById("filter-btn");
+const filterPopup = document.getElementById("filter-popup");
+filterBtn.addEventListener("click", function () {
+  filterPopup.classList.toggle("hidden");
+});
+
+// Ferme le popup si on clique en dehors
+document.addEventListener("click", function (e) {
+  if (
+    !filterPopup.classList.contains("hidden") &&
+    !filterPopup.contains(e.target) &&
+    e.target !== filterBtn
+  ) {
+    filterPopup.classList.add("hidden");
+  }
+});
+
+// Applique le filtre selon les cases cochées
+document
+  .getElementById("filter-apply-btn")
+  .addEventListener("click", function () {
+    const showCafes = document.getElementById("filter-cafes").checked;
+    const showMusees = document.getElementById("filter-musees").checked;
+    // Masque tous les marqueurs
+    Object.values(markers)
+      .flat()
+      .forEach((marker) => map.removeLayer(marker));
+    // Affiche selon le filtre
+    if (showCafes) markers.cafes.forEach((marker) => marker.addTo(map));
+    if (showMusees) markers.musees.forEach((marker) => marker.addTo(map));
+    filterPopup.classList.add("hidden");
+  });
