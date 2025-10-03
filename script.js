@@ -48,37 +48,90 @@ function onMapClick(e) {
 
 map.on("click", onMapClick);
 
-// Marqueur Café Joyeux (St-Augustin) (icône par défaut)
+// Fonction pour afficher le popup personnalisé
+function showCustomPopup({ name, image, url }) {
+  const popup = document.getElementById("custom-popup");
+  popup.innerHTML = `
+    <img src="${image}" alt="${name}" />
+    <div class="popup-title">${name}</div>
+    <a class="popup-link" href="${url}" target="_blank">Voir le site</a>
+  `;
+  popup.classList.remove("hidden");
+}
+
+// Fonction pour masquer le popup personnalisé
+function hideCustomPopup() {
+  document.getElementById("custom-popup").classList.add("hidden");
+}
+
+// Marqueurs avec popup personnalisé
 L.marker([48.8686, 2.3359])
   .addTo(map)
-  .bindPopup("☕️ Café Joyeux (St-Augustin)")
-  .openPopup();
+  .on("click", function () {
+    showCustomPopup({
+      name: "☕️ Café Joyeux (St-Augustin)",
+      image:
+        "https://lh3.googleusercontent.com/p/AF1QipNmEM3yyUxVAcIsGCgYyCPqrChzkoVFeWSJTUOq=s1360-w1360-h1020",
+      url: "https://www.cafejoyeux.com/fr/content/41-cafe-joyeux-paris-opera",
+    });
+  });
 
-// Marqueur Café Tranquille (icône par défaut)
 L.marker([48.8765, 2.3562])
   .addTo(map)
-  .bindPopup("☕️ Café Tranquille")
-  .openPopup();
+  .on("click", function () {
+    showCustomPopup({
+      name: "☕️ Café Tranquille",
+      image:
+        "https://lh3.googleusercontent.com/p/AF1QipNJxxh7hzuuTO0VuBCPNvUFKHkgO0BoLg5l90gF=s1360-w1360-h1020",
+      url: "https://www.instagram.com/cafetranquille",
+    });
+  });
 
-// Marqueur Musée du quai Branly (icône par défaut)
 L.marker([48.8606, 2.2976])
   .addTo(map)
-  .bindPopup("🏛️ Musée du quai Branly")
-  .openPopup();
+  .on("click", function () {
+    showCustomPopup({
+      name: "🏛️ Musée du quai Branly",
+      image:
+        "https://lh3.googleusercontent.com/p/AF1QipMuncpXbWlPpLbu9rK8t3EbsYToaFQnF4e5senZ=s1360-w1360-h1020",
+      url: "https://www.quaibranly.fr/",
+    });
+  });
 
-// Marqueur Le Musée en Herbe (icône par défaut)
 L.marker([48.8617, 2.3435])
   .addTo(map)
-  .bindPopup("🏛️ Le Musée en Herbe")
-  .openPopup();
+  .on("click", function () {
+    showCustomPopup({
+      name: "🏛️ Le Musée en Herbe",
+      image:
+        "https://lh3.googleusercontent.com/p/AF1QipN1opHFTqspUndplnzgwqFataHw9sGQ8bt9cIMb=s1360-w1360-h1020",
+      url: "https://www.musee-en-herbe.com/",
+    });
+  });
 
-// Marqueur Musée de poche (icône par défaut)
 L.marker([48.8707, 2.3702])
   .addTo(map)
-  .bindPopup(
-    '<a href="https://museedepoche.fr" target="_blank">🏛️ Musée de poche</a>'
-  )
-  .openPopup();
+  .on("click", function () {
+    showCustomPopup({
+      name: "🏛️ Musée de poche",
+      image:
+        "https://lh3.googleusercontent.com/p/AF1QipORT7mT8wrTuRp0tB_cR9AKPDSVehIMy1UBzhvH=s1360-w1360-h1020",
+      url: "https://museedepoche.fr",
+    });
+  });
+
+// Masquer le popup si on clique sur la carte ou sur le marqueur principal
+map.on("click", function (e) {
+  hideCustomPopup();
+});
+
+L.marker([48.8566, 2.3522], { icon: pinkIcon })
+  .addTo(map)
+  .bindPopup("Ma position")
+  .openPopup()
+  .on("click", function () {
+    hideCustomPopup();
+  });
 
 // Bouton de recentrage sur "Ma position"
 document.getElementById("recenter-btn").addEventListener("click", function () {
@@ -87,8 +140,5 @@ document.getElementById("recenter-btn").addEventListener("click", function () {
 
 map.on("click", function (e) {
   // Ajoute un marqueur à l'endroit du clic
-  L.marker(e.latlng)
-    .addTo(map)
-    .bindPopup("Nouveau marqueur<br>Coordonnées : " + e.latlng.toString())
-    .openPopup();
+  L.marker(e.latlng).addTo(map).bindPopup("Nouveau lieu").openPopup();
 });
